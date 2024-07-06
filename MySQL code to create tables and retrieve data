@@ -1,0 +1,378 @@
+CREATE DATABASE IF NOT EXISTS travels;
+
+USE travels;
+-- Create BUS table
+CREATE TABLE IF NOT EXISTS BUS (
+    BusNo INT PRIMARY KEY,
+    Source VARCHAR(255),
+    Destination VARCHAR(255),
+    CoachType VARCHAR(50),
+    TICKETAMOUNT INT
+  
+);
+-- Create TICKET table
+CREATE TABLE IF NOT EXISTS TICKET (
+    TicketNo INT PRIMARY KEY,
+    DOJ DATE,
+    Address VARCHAR(255),
+    ContactNo VARCHAR(15),
+    BusNo INT,
+    SeatNo INT,
+    Source VARCHAR(255),
+    Destination VARCHAR(255),
+    FOREIGN KEY (BusNo) REFERENCES BUS(BusNo)
+);
+
+-- Create PASSENGER table
+CREATE TABLE IF NOT EXISTS PASSENGER (
+    PassportID INT PRIMARY KEY,
+    TicketNo INT,
+    Name VARCHAR(100),
+    ContactNo VARCHAR(15),
+    Age INT,
+    Sex CHAR(1),
+    Address VARCHAR(255),
+    FOREIGN KEY (TicketNo) REFERENCES TICKET(TicketNo)
+);
+
+-- Create RESERVATION table
+CREATE TABLE IF NOT EXISTS RESERVATION (
+    PNRNo INT PRIMARY KEY,
+    DOJ DATE,
+    No_of_Seats INT,
+    Address VARCHAR(255),
+    ContactNo VARCHAR(15),
+    BusNo INT,
+    SeatNo INT,
+    FOREIGN KEY (BusNo) REFERENCES BUS(BusNo)
+);
+
+-- Create CANCELLATION table
+CREATE TABLE IF NOT EXISTS CANCELLATION (
+    PNRNo INT PRIMARY KEY,
+    DOJ DATE,
+    SeatNo INT,
+    ContactNo VARCHAR(15),
+    Pstatus VARCHAR(50)
+);
+-- Insert values into BUS table
+INSERT IGNORE INTO BUS (BusNo, Source, Destination, CoachType,TICKETAMOUNT) VALUES
+(1, 'CityA', 'Citya', 'Sleeper',200),
+(2, 'CityB', 'Cityb', 'AC',300),
+(3, 'CityC', 'Cityc', 'Semi-Sleeper',420),
+(4, 'CityD', 'Cityd', 'Sleeper',410),
+(5, 'CityE', 'Citye', 'AC',320),
+(6, 'CityF', 'Cityf', 'Semi-Sleeper',300),
+(7, 'CityG', 'Cityg', 'Semi-Sleeper',450),
+(8, 'CityH', 'Cityh', 'Semi-Sleeper',75),
+(9, 'CityI', 'Cityi', 'AC',700),
+(10, 'CityJ', 'Citj', 'Semi-Sleeper',670);
+
+-- Insert values into TICKET table
+INSERT IGNORE INTO TICKET (TicketNo, DOJ, Address, ContactNo, BusNo, SeatNo, Source, Destination) VALUES
+(101, '2023-11-26', 'Address1', '1234567890', 1, 10, 'CityA', 'Citya'),
+(102, '2023-11-27', 'Address2', '9876543210', 2, 5, 'CityB', 'Cityb'),
+(103, '2023-11-28', 'Address3', '5551234567', 2, 8, 'CityC', 'Cityc'),
+(104, '2023-11-28', 'Address4', '1122334455', 3, 9, 'CityD', 'Cityd'),
+(105, '2023-11-28', 'Address5', '6677889910', 3, 4, 'CityE', 'Citye'),
+(106, '2023-11-28', 'Address6', '1212343456', 3, 2, 'CityF', 'Cityf'),
+(107, '2023-11-29', 'Address7', '5656787899', 4, 1, 'CityG', 'Cityg'),
+(108, '2023-11-30', 'Address8', '1542367988', 4, 3, 'CityH', 'Cityh'),
+(109, '2023-11-30', 'Address9', '9146572030', 4, 7, 'CityI', 'Cityi'),
+(110, '2023-11-30', 'Address10', '5588224466',4, 6, 'CityJ', 'Cityj');
+
+-- Insert values into PASSENGER table
+INSERT IGNORE INTO PASSENGER (PassportID, TicketNo, Name, ContactNo, Age, Sex, Address) VALUES
+(1001, 101, 'Passenger1', '1234567890', 25, 'M', 'Passenger1Address'),
+(1002, 102, 'RATHI', '9876543210', 30, 'M', 'Passenger2Address'),
+(1003, 103, 'Passenger3', '5551234567', 25, 'M', 'Passenger3Address'),
+(1004, 104, 'Passenger4', '1122334455', 18, 'M', 'Passenger4Address'),
+(1005, 105, 'ROSHNI', '6677889910', 101, 'F', 'Passenger5Address'),
+(1006, 106, 'Passenger6', '1212343456', 22, 'M', 'Passenger6Address'),
+(1007, 107, 'Passenger7', '5656787899', 22, 'F', 'Passenger7Address'),
+(1008, 108, 'Passenger8', '1542367988', 22, 'F', 'Passenger8Address'),
+(1009, 109, 'IKRAM', '9146572030', 105, 'M', 'Passenger9Address'),
+(1010, 110, 'Passenger10', '5588224466', 19, 'F', 'Passenger10Address');
+
+-- Insert values into RESERVATION table
+INSERT IGNORE INTO RESERVATION (PNRNo, DOJ, No_of_Seats, Address, ContactNo, BusNo, SeatNo) VALUES
+(10001, '2023-11-26', 2, 'ReserveAddress1', '1234567890', 1, 10),
+(10002, '2023-11-27', 1, 'ReserveAddress2', '9876543210', 2, 5),
+(10003, '2023-11-28', 3, 'ReserveAddress3', '5551234567', 2, 8),
+(10004, '2023-11-28', 6, 'ReserveAddress4', '1122334455', 3, 9),
+(10005, '2023-11-28', 8, 'ReserveAddress5', '6677889910', 3, 4),
+(10006, '2023-11-29', 10, 'ReserveAddress6', '1212343456', 3, 2),
+(10007, '2023-11-29', 3, 'ReserveAddress7', '5656787899', 4, 1),
+(10008, '2023-11-30', 3, 'ReserveAddress8', '1542367988', 4, 3),
+(10009, '2023-11-30', 5, 'ReserveAddress9', '9146572030', 4, 7),
+(10010, '2023-11-30', 4, 'ReserveAddress10', '5588224466', 4, 6);
+
+-- Insert values into CANCELLATION table
+INSERT IGNORE INTO CANCELLATION (PNRNo, DOJ, SeatNo, ContactNo, Pstatus) VALUES
+(10001, '2023-11-26', 10, '1234567890', 'Cancelled'),
+(10004, '2023-11-28', 9, '1212343456', 'Cancelled'),
+(10006, '2023-11-29', 2, '5656787899', 'Pending'),
+(10007, '2023-11-29', 1, '9876543210', 'Cancelled'),
+(10009, '2023-11-30', 7, '9146572030', 'Pending');
+
+
+
+SHOW DATABASES;
+SHOW TABLES;
+
+-- Query 1 : Display unique PNR_NO of all passengers--
+SELECT DISTINCT PNRNo from RESERVATION ;
+
+-- Query 2 : Display all the names of male passengers--
+SELECT Name from PASSENGER WHERE Sex='M' ;
+
+-- Query 3 :Display the ticket numbers and names of all the passengers --
+SELECT TicketNo,Name from PASSENGER;
+
+-- Query 4 : Find the ticket numbers of the passengers whose name start with ‘r’ and ends with ‘h’ --
+SELECT P.TicketNo
+FROM PASSENGER P
+WHERE Name LIKE 'r%h';
+
+-- Query 5 :Find the names of Passengers whose age is between 30 and 45 --
+SELECT Name from PASSENGER WHERE Age BETWEEN 20 AND 25;
+
+-- Query 6 :Display all the passengers names beginning with ‘A’. 7. Display the sorted list of Passengers names  --
+SELECT Name
+FROM PASSENGER
+WHERE Name LIKE 'A%';
+-- Query 7  : Write a Query to display the information present in the passenger and cancellation tables --
+SELECT * from CANCELLATION
+JOIN PASSENGER
+ON PASSENGER.ContactNo=CANCELLATION.ContactNo;
+
+-- Query 8 : Display the number of days in a week on which the AP123 bus is available --
+SELECT * FROM PASSENGER
+UNION ALL
+SELECT * FROM RESERVATION;
+-- Query 9 :Find number of tickets booked for each PNR_No using GROUP BY CLAUSE --
+SELECT TicketNo, COUNT(*) AS No_Of_Tickets
+FROM TICKET
+GROUP BY TicketNo;
+
+-- Query 10 : Find the distinct PNR Numbers that are present --
+SELECT DISTINCT PNRNo FROM RESERVATION;
+
+
+
+-- DDL COMMAND
+-- ADD
+SELECT * FROM travels.bus;
+USE travels;
+ALTER TABLE BUS
+ADD COLUMN NEWCOLUMN
+VARCHAR(255);
+-- MODIFY
+
+SELECT * FROM travels.bus;
+USE travels;
+ALTER TABLE BUS
+MODIFY COLUMN NEWCOLUMN
+VARCHAR(255);
+
+-- DROP
+SELECT * FROM travels.bus;
+USE travels;
+ALTER TABLE BUS
+DROP COLUMN NEWCOLUMN;
+
+-- TRUNCATE 
+SELECT * FROM travels.Cancellation;
+ALTER TABLE Cancellation;
+TRUNCATE TABLE Cancellation;
+
+-- RENAME
+ALTER TABLE Cancellation
+RENAME TO Cancellation_det;
+
+-- DROP
+DROP TABLE Cancellation_det;
+
+/* this is multi line comment 
+SELECT * FROM CANCELLATION; */
+-- this is single line comment.
+
+-- DML COMMAND.
+CREATE TABLE IF NOT EXISTS BUS (
+    BusNo INT PRIMARY KEY,
+    Source VARCHAR(255),
+    Destination VARCHAR(255),
+    CoachType VARCHAR(50),
+  TICKETAMOUNT INT
+);
+
+
+-- UPDATE
+SELECT * FROM travels.bus;
+UPDATE BUS
+SET Source = 'CityZ'
+WHERE BusNo = 3;
+
+-- DELETE
+
+DELETE FROM BUS
+WHERE BusNo = 5;
+
+-- DQL COMMAND.
+-- BASIC SELECT
+SELECT BusNo,Source,Destination,CoachType FROM BUS;
+
+-- SELECT WITH WHERE CLAUSE
+SELECT BusNo,Source,Destination,CoachType FROM BUS
+WHERE BusNo = 4;
+
+-- GROUP BY WITH FUNCTION (COUNT)
+SELECT CoachType, COUNT(CoachType) AS total
+FROM BUS
+GROUP BY CoachType ;
+
+-- ORDER BY
+SELECT BusNo,Source, Destination, CoachType
+FROM BUS
+ORDER BY BusNo DESC;
+
+-- HAVING WITH GROUP BY
+SELECT CoachType, COUNT(CoachType) AS total
+FROM BUS
+GROUP BY CoachType
+HAVING total > 2;
+
+-- BETWEEN
+SELECT BusNo,Source,Destination,CoachType
+FROM BUS
+WHERE CoachType BETWEEN 10 AND 30;
+
+-- IN / NOT IN 
+SELECT BusNo,Source,Destination,CoachType
+FROM BUS
+WHERE CoachType IN('Semi-Sleeper');
+
+-- LIKE
+SELECT BusNo,Source,Destination,CoachType
+FROM BUS
+WHERE CoachType LIKE 'A%';
+
+-- LIMIT
+SELECT BusNo,Source,Destination,CoachType
+FROM BUS
+LIMIT 3;
+
+-- ALIAS
+SELECT BusNo AS BN,Source AS S,Destination AS D,CoachType AS CT
+FROM BUS;
+
+-- CASE
+SELECT * FROM travels.bus;
+SELECT  BusNo,Source,Destination,CoachType,TICKETAMOUNT,
+CASE
+WHEN TICKETAMOUNT > 400 THEN 'High Amount'
+WHEN TICKETAMOUNT < 100 THEN 'Less Amount'
+ELSE 'Medium Amount'
+END AS amount_category
+FROM bus;
+
+-- Implement various type aggregation functions with SQL Query.
+-- COUNT
+SELECT COUNT(BusNo) AS BusNo_count
+FROM BUS;
+
+-- MAX
+SELECT * FROM travels.bus;
+SELECT MAX(TICKETAMOUNT) AS AVERAGE_TICKETAMOUNT_amount
+FROM BUS;
+
+-- MIN
+SELECT MIN(TICKETAMOUNT) AS AVERAGE_TICKETAMOUNT_amount
+FROM BUS;
+
+-- SUM
+SELECT SUM(TICKETAMOUNT) AS AVERAGE_TICKETAMOUNT_amount
+FROM BUS;
+
+-- AVERAGE
+SELECT AVG(TICKETAMOUNT) AS AVERAGE_TICKETAMOUNT_amount
+FROM BUS;
+
+-- Implement various types of operators in SQL Query.
+-- ARITHMETIC OPERATORS
+SELECT BusNo, TICKETAMOUNT, TICKETAMOUNT * 1.5 AS Increased_Amount
+FROM BUS;
+
+-- LOGICAL OPERATORS
+SELECT BusNo, TICKETAMOUNT, CoachType
+FROM BUS
+WHERE TICKETAMOUNT > 200 AND CoachType = 'SLEEPER';
+
+-- COMPARISION OPERATOR
+SELECT BusNo, TICKETAMOUNT, CoachType
+FROM BUS
+WHERE TICKETAMOUNT = 300;
+
+-- SPECIAL OPERATOR(IS NULL)
+SELECT * FROM travels.bus;
+SELECT BusNo, Destination, TICKETAMOUNT, CoachType
+FROM BUS
+WHERE TICKETAMOUNT IS NULL ;
+
+-- SET OPERATION(UNION)
+SELECT * FROM travels.bus;
+SELECT BusNo, Destination, TICKETAMOUNT, CoachType
+FROM BUS;
+
+-- Implement various types of Joins.
+SELECT * FROM travels.bus;
+CREATE TABLE IF NOT EXISTS busdata1 (
+TICKETAMOUNT INT PRIMARY KEY,
+CoachType VARCHAR (70)
+);
+INSERT IGNORE INTO busdata1 (TICKETAMOUNT, CoachType) VALUES
+(100, 'AC'),
+(200, 'Semi-Sleeper'),
+(500, 'Semi-Sleeper'),
+(450, 'Sleeper'),
+(440, 'AC'),
+(75, 'Sleeper'),
+(550, 'AC'),
+(390, 'AC'),
+(490, 'Sleeper'),
+(330, 'Semi-Sleeper');
+
+-- INNER JOIN
+SELECT t.Source, t.Destination, t.TICKETAMOUNT, t.CoachType, t.BusNo,
+ad.CoachType
+FROM BUS t
+INNER JOIN busdata1 ad ON t.TICKETAMOUNT = ad.TICKETAMOUNT;
+
+-- LEFT
+SELECT t.Source, t.Destination, t.TICKETAMOUNT, t.CoachType, t.BusNo,
+ad.CoachType
+FROM BUS t
+LEFT JOIN busdata1 ad ON t.TICKETAMOUNT = ad.TICKETAMOUNT;
+
+-- RIGHT
+SELECT t.Source, t.Destination, t.TICKETAMOUNT, t.CoachType, t.BusNo,
+ad.CoachType
+FROM BUS t
+RIGHT JOIN busdata1 ad ON t.TICKETAMOUNT = ad.TICKETAMOUNT;
+
+-- FULL
+SELECT t.Source, t.Destination, t.TICKETAMOUNT, t.CoachType, t.BusNo,
+ad.CoachType
+FROM BUS t
+LEFT JOIN busdata1 ad ON t.TICKETAMOUNT = ad.TICKETAMOUNT
+UNION
+SELECT t.Source, t.Destination, t.TICKETAMOUNT, t.CoachType, t.BusNo,
+ad.CoachType
+FROM BUS t
+RIGHT JOIN busdata1 ad ON t.TICKETAMOUNT = ad.TICKETAMOUNT;
+
+-- NATURAL
+SELECT Source, Destination, TICKETAMOUNT,CoachType, BusNo,
+t.CoachType
+FROM BUS t
+NATURAL JOIN busdata1;
